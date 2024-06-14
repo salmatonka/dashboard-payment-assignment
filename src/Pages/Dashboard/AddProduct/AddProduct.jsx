@@ -3,46 +3,52 @@ import { FaUtensils } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../../useHooks/useAxiosPublic";
 import useAxiosSecure from "../../../useHooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 const AddProduct = () => {
 
     const { register, handleSubmit, reset } = useForm();
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
+
     const onSubmit = async (data) => {
         console.log(data)
         // image upload to imgbb and then get an url
-        const imageFile = { image: data.image[0] }
+        const imageFile = { image: data.img[0] }
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
                 'content-type': 'multipart/form-data'
             }
         });
         if (res.data.success) {
-            // now send the menu item data to the server with the image url
-            const menuItem = {
+            // now send the sercice item data to the server with the image url
+            const serciceItem = {
                 name: data.name,
                 category: data.category,
                 price: parseFloat(data.price),
                 rating: data.rating,
                 description: data.description,
-                img: res.data.data.display_url
+                image: res.data.data.display_url
             }
             // 
-            const menuRes = await axiosSecure.post('/usedServices', menuItem);
-            console.log(menuRes.data)
-            if (menuRes.data.insertedId) {
+            const serciceRes = await axiosSecure.post('/usedServices', serciceItem);
+            console.log(serciceRes.data)
+            if (serciceRes.data.insertedId) {
                 // show success popup
-                reset();
+               
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: `${data.name} is added to the menu.`,
+                    title: `${data.name} is added to the sercice.`,
                     showConfirmButton: false,
                     timer: 1500
                 });
+                reset();
+                navigate('/service');
             }
         }
         console.log('with image url', res.data);
@@ -50,8 +56,8 @@ const AddProduct = () => {
 
 
     return (
-        <div className='bg-gradient-to-tr to-purple-100 from-cyan-100 py-10 px-14'>
-            <div className='flex mb-12 mt-5'>
+        <div className=' py-16 px-14'>
+            <div className='flex justify-center mb-12 mt-5'>
                 <div className='shadow-xl p-10 border border-2'>
                     <h3 className='text-3xl text-bold text-center'>Please Add Product</h3>
                     <form onSubmit={handleSubmit(onSubmit)}>

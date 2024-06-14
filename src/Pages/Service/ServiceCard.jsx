@@ -6,7 +6,7 @@ import useAxiosSecure from '../../useHooks/useAxiosSecure';
 import useCart from '../../useHooks/useCart';
 
 const ServiceCard = ({ service }) => {
-    const { _id, name, img, price, rating, description } = service;
+    const { _id, name, image, price, rating, description } = service;
 
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ServiceCard = ({ service }) => {
                 serviceId: _id,
                 email: user.email,
                 name,
-                img,
+                image,
                 price
             }
             axiosSecure.post('/carts', cartItem)
@@ -65,7 +65,7 @@ const ServiceCard = ({ service }) => {
         <div className="rounded-md shadow-md  dark:bg-gray-900 dark:text-gray-100">
             <div className="flex items-center justify-between p-3">
                 <div className="d-flex justify-content-center space-x-5">
-                    <img src={img} alt="" className="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700" />
+                    <img src={image} alt="" className="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700" />
                     <div className="-space-y-1">
                         <h2 className="text-sm font-semibold leading-none">Rating: {rating}</h2>
                         <span className="inline-block text-xs leading-none dark:text-gray-400">Price: {price}</span>
@@ -79,7 +79,7 @@ const ServiceCard = ({ service }) => {
                     </svg>
                 </button>
             </div>
-            <img src={img} alt="" className="object-cover object-center w-full h-72 dark:bg-gray-500" />
+            <img src={image} alt="" className="object-cover object-center w-full h-72 dark:bg-gray-500" />
             <div className="p-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -108,16 +108,16 @@ const ServiceCard = ({ service }) => {
                 <div className="flex flex-wrap items-center pt-3 pb-1">
                     <div className="flex items-center space-x-2">
                         <div className="flex -space-x-1">
-                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={img} />
-                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={img} />
-                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={img} />
+                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={image} />
+                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={image} />
+                            <img alt="" className="w-5 h-5 border rounded-full dark:bg-gray-500 dark:border-gray-800" src={image} />
                         </div>
                         <h1 className="text-xl">{name}</h1>
                     </div>
                 </div>
                 <div className="space-y-3">
                     <p className="text-sm pt-6">
-                        {description?.length > 100 ? description.slice(0, 80) + "..." : description}
+                        {description?.length > 100 ? description?.slice(0, 80) + "..." : description}
                     </p>
 
                     <p >Price: <span className='text-blue-700 font-bold '> {price} TK</span> </p>

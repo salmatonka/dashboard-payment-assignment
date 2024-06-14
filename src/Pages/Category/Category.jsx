@@ -2,26 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Category = () => {
-  // const [categories, setcategories] = useState([]);
-  // useEffect(() => {
-  //   fetch('http://localhost:5000/category')
-  //     .then(res => res.json())
-  //     .then(data => setcategories(data))
-  // }, [])
+
   return (
     <div className=" ">
       <div className=' w-full mx-auto'>
         <h1 className="text-3xl text-[#1D59A0] pt-14 font-bold text-center pb-10">Elopement Category</h1>
 
         <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 px-10 py-10 w-full mx-auto'>
-          {/* {
-                    categories?.map(category => <Link
-                        key={category?.id}
-                        category={category}
-                        to={`/service/${category?.category}`}>
-                        <button className='category-button bg-[#1159AB] text-white w-full py-3 rounded-lg'>{category.name}</button></Link>
-                    )
-                } */}
 
           <Link to={`/usedphoto/fourDay`}>
             <button className='bg-[#1159AB] text-white w-full py-3 rounded-lg'>Four Day Elopement</button>
@@ -41,8 +28,6 @@ const Category = () => {
           <Link to={`/usedphoto/miniDay`}>
             <button className='bg-[#1159AB] text-white w-full py-3 rounded-lg'>Mini Day Elopement</button>
           </Link>
-
-
 
         </div>
       </div>

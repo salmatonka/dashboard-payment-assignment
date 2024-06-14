@@ -1,200 +1,143 @@
-import React, { useContext, useState } from 'react'
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useForm } from "react-hook-form";
+import { FaUtensils } from "react-icons/fa";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../../useHooks/useAxiosPublic";
+import useAxiosSecure from "../../../useHooks/useAxiosSecure";
+import { useLoaderData, useNavigate } from "react-router-dom";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const EditProduct = () => {
-    const product = useLoaderData();
-    console.log(product)
-    const [name, setName] = useState(product.name)
-    const [date, setDate] = useState(product.date)
-    const [img, setImg] = useState(product.imge)
-    const [model, setModel] = useState(product.model)
-    const [category, setCategory] = useState(product.categorye)
-    const [location, setLocation] = useState(product.location)
-    const [resale_price, setResale_price] = useState(product.resale_price)
-    const [original_price, setOriginal_price] = useState(product.original_price)
-    const [yearUsed, setYearUsed] = useState(product.yearUsed)
-    const [details, setDetails] = useState(product.details)
+    const {name, category, rating, description, price, _id} = useLoaderData();
 
+    const { register, handleSubmit, reset } = useForm();
+    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
-
-    const { user } = useContext(AuthContext)
     const navigate = useNavigate();
 
-
-    const handleSubmit = event => {
-        event.preventDefault()
-        const form = event.target;
-        const brandName = form.brandName.value;
-        const sellerName = form.sellerName.value;
-        const date = form.date.value;
-        const img = form.img.value;
-        const model = form.model.value;
-        const category = form.category.value;
-        const location = form.location.value;
-        const resale_price = form.resale_price.value;
-        const original_price = form.original_price.value;
-        const yearUsed = form.yearUsed.value;
-        const details = form.details.value;
-
-        const newData = {
-            name: brandName,
-            sellerName,
-            img,
-            model,
-            location,
-            resale_price,
-            original_price,
-            category,
-            details,
-            userEmail: user.email,
-            date, yearUsed
-        }
-        // console.log(newData)
-        fetch(`https://mobile-market-server.onrender.com/myProduct?email=${user?.email}`, {
-            method: "PATCH",
+    const onSubmit = async (data) => {
+        console.log(data)
+        // image upload to imgbb and then get an url
+        const imageFile = { image: data.image[0] }
+        const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(newData)
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-                toast.success('product added')
-                navigate('/dashboard/myProduct')
+                'content-type': 'multipart/form-data'
+            }
+        });
+        if (res.data.success) {
+            // now send the menu item data to the server with the image url
+            const menuItem = {
+                name: data.name,
+                category: data.category,
+                price: parseFloat(data.price),
+                rating: data.rating,
+                description: data.description,
+                img: res.data.data.display_url
+            }
+            // 
+            const serviceRes = await axiosSecure.post('/usedServices', menuItem);
+            console.log(serviceRes.data)
+            if (serviceRes.data.insertedId) {
+                // show success popup
+                
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: `${data.name} is added to the menu.`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                reset();
+                navigate('/dashboard/myProduct');
+            }
+        }
+        console.log('with image url', res.data);
+    };
 
-            })
 
-
-
-    }
     return (
-        <div className='bg-gradient-to-tr to-purple-100 from-cyan-100 py-10 px-14'>
-            <div className='flex mb-12 mt-5'>
+        <div className=' py-16 px-14'>
+            <div className='flex justify-center mb-12 mt-5'>
                 <div className='shadow-xl p-10 border border-2'>
-                    <h3 className='text-3xl text-bold text-center'> Edit Product</h3>
-                    <form onSubmit={handleSubmit}>
+                    <h3 className='text-3xl text-bold text-center'>Please Add Product</h3>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div className='md:flex gap-10'>
                             {/* left side  */}
                             <div className='md:w-1/2 '>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">BrandName</span></label>
+                                {/* service Name */}
+                                <div className="form-control w-full my-6">
+                                    <label className="label">
+                                        <span className="label-text">Service Name</span>
+                                    </label>
                                     <input
-                                        onChange={(e) => setName(e.target.value)}
-                                        value={name}
-                                        name='brandName'
-                                        type='text'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Picture</span></label>
-                                    <input
-                                        onChange={(e) => setImg(e.target.value)}
-                                        value={img}
-                                        name='img'
-                                        type='text'
-                                        className="file-input file-input-bordered file-input-info w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">SellerName</span></label>
-                                    <input
-                                        disabled
-                                        defaultValue={user?.displayName}
-                                        name='sellerName'
-                                        type='text' className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Location</span></label>
-                                    <input
-                                        onChange={(e) => setLocation(e.target.value)}
-                                        value={location}
-                                        name='location'
-                                        type='text'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Date</span></label>
-                                    <input
-                                        onChange={(e) => setDate(e.target.value)}
-                                        value={date}
-                                        name='date'
-                                        type='date'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Model</span></label>
-                                    <input
-                                        onChange={(e) => setModel(e.target.value)}
-                                        value={model}
-                                        name='model'
-                                        type='text'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Category</span></label>
-                                    <select
-                                        onChange={(e) => setCategory(e.target.value)}
+                                    defaultValue={name}
+                                        type="text"
+                                        placeholder="Service Name"
+                                        {...register('name', { required: true })}
                                         required
-                                        value={category}
-                                        name='category'
-                                        className="select select-bordered w-full">
-                                        <option value='iphone'>iphone</option>
-                                        <option value='Samsung'>Samsung</option>
-                                        <option value='Nokia'>Nokia</option>
-                                        <option value='Redmi'>Redmi</option>
-                                        <option value='Vivo'>Vivo</option>
-                                        <option value='Walton'>Walton</option>
-                                    </select>
+                                        className="input input-bordered w-full" />
                                 </div>
+
+
+                                {/* price */}
+                                <div className="form-control w-full my-6">
+                                    <label className="label">
+                                        <span className="label-text">Price*</span>
+                                    </label>
+                                    <input
+                                    defaultValue={price}
+                                        type="number"
+                                        placeholder="Price"
+                                        {...register('price', { required: true })}
+                                        className="input input-bordered w-full" />
+                                </div>
+
+                                {/* rating */}
+                                <div className="form-control w-full my-6">
+                                    <label className="label">
+                                        <span className="label-text">Rating</span>
+                                    </label>
+                                    <input
+                                    defaultValue={rating}
+                                        type="number"
+                                        placeholder="Rating"
+                                        {...register('rating', { required: true })}
+                                        className="input input-bordered w-full" />
+                                </div>
+
                             </div>
                             {/* Right side  */}
                             <div className='md:w-1/2'>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Resale Price</span></label>
-                                    <input
-                                        onChange={(e) => setResale_price(e.target.value)}
-                                        value={resale_price}
-                                        name='resale_price'
-                                        type='number'
-                                        className="input input-bordered w-full" required />
+
+                                <div className="form-control w-full my-6">
+                                    <label className="label">
+                                        <span className="label-text">Category*</span>
+                                    </label>
+                                    <select defaultValue={category}  {...register('category', { required: true })}
+                                        className="select select-bordered w-full">
+                                        <option disabled value="default">Select a category</option>
+                                        <option value="fourDay">fourDay</option>
+                                        <option value="threeDay">ThreeDay</option>
+                                        <option value="twoDay">TwoDay</option>
+                                        <option value="fullDay">FullDay</option>
+                                        <option value="halfDay">HalfDay</option>
+                                        <option value="miniDay">MiniDay</option>
+                                    </select>
                                 </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">OriginalPrice</span></label>
-                                    <input
-                                        onChange={(e) => setOriginal_price(e.target.value)}
-                                        value={original_price}
-                                        name='original_price'
-                                        type='number'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Email</span></label>
-                                    <input
-                                        disabled
-                                        defaultValue={user?.email}
-                                        name='email'
-                                        type='email'
-                                        className="input input-bordered w-full" />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Years of Use</span></label>
-                                    <input
-                                        onChange={(e) => setYearUsed(e.target.value)}
-                                        value={yearUsed}
-                                        name='yearUsed'
-                                        type='text'
-                                        className="input input-bordered w-full" required />
-                                </div>
-                                <div className="form-control w-full">
-                                    <label className="label"> <span className="label-text">Details</span></label>
-                                    <textarea
-                                        onChange={(e) => setDetails(e.target.value)}
-                                        value={details}
-                                        name='details'
-                                        type='text'
-                                        className="input input-bordered w-full h-32" required />
-                                </div>
+
+                                <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Description</span>
+                        </label>
+                        <textarea defaultValue={description} {...register('description')} className="textarea textarea-bordered h-24" placeholder="Description"></textarea>
+                    </div>
+
+                    <div className="form-control w-full my-6">
+                        <input  {...register('image', { required: true })} type="file" className="file-input w-full max-w-xs" />
+                    </div>
+
 
                             </div>
                         </div>
@@ -209,5 +152,4 @@ const EditProduct = () => {
         </div>
     );
 };
-
 export default EditProduct

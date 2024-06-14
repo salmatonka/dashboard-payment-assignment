@@ -23,8 +23,8 @@ const Navbar = () => {
     <li><NavLink className="rounded-xl" to='/'>Home</NavLink></li>
     <li><NavLink to="/dashboard/cart">
       <button className="btn">
-        <FaShoppingCart className="mr-2"></FaShoppingCart>
-        <div className="badge badge-secondary">+{cart?.length}</div>
+        <FaShoppingCart className="badge badge-primary"></FaShoppingCart>
+        <div className="">+{cart?.length}</div>
       </button>
     </NavLink></li>
     <li><NavLink className=" rounded-xl" to='/blog'>Blog</NavLink></li>
@@ -34,7 +34,7 @@ const Navbar = () => {
       user?.uid ?
         <>
           <li><NavLink className="rounded-xl " to='/service'>Service</NavLink></li>
-          <li><NavLink className="rounded-xl " to='/dashboard'>Dashboard</NavLink></li>
+          {/* <li><NavLink className="rounded-xl " to='/dashboard'>Dashboard</NavLink></li> */}
           <li><button onClick={handleLogOut}>Sign Out</button></li>
         </>
         :

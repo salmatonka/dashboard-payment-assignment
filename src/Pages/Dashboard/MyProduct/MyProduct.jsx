@@ -1,11 +1,13 @@
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../useHooks/useAxiosSecure";
-
+import useServiceHook from "../../../useHooks/useServiceHook";
 const MyProduct = () => {
-    const [menu, , refetch] = useMenu();
+    // console.log(usedServices)
+    const [usedServices, , refetch] = useServiceHook();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const handleDeleteItem = (item) => {
         Swal.fire({
@@ -18,11 +20,11 @@ const MyProduct = () => {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await axiosSecure.delete(`/menu/${item._id}`);
+                const res = await axiosSecure.delete(`/usedServices/${item._id}`);
                 // console.log(res.data);
                 if (res.data.deletedCount > 0) {
                     // refetch to update the ui
-                    refetch();
+                    
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
@@ -30,6 +32,8 @@ const MyProduct = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    refetch();
+                    // navigate('/');
                 }
 
 
@@ -39,7 +43,7 @@ const MyProduct = () => {
 
     return (
         <div>
-            <SectionTitle heading="Manage All Items" subHeading="Hurry up"></SectionTitle>
+           
             <div>
                 <div className="overflow-x-auto">
                     <table className="table w-full">
@@ -58,7 +62,7 @@ const MyProduct = () => {
                         </thead>
                         <tbody>
                             {
-                                menu.map((item, index) => <tr key={item._id}>
+                                usedServices.map((item, index) => <tr key={item._id}>
                                     <td>
                                         {index + 1}
                                     </td>
@@ -76,9 +80,9 @@ const MyProduct = () => {
                                     </td>
                                     <td className="text-right">${item.price}</td>
                                     <td>
-                                        <Link to={`/dashboard/updateItem/${item._id}`}>
+                                        <Link to={`/dashboard/editProduct/${item._id}`}>
                                             <button
-                                                className="btn btn-ghost btn-lg bg-orange-500">
+                                                className="btn btn-ghost  bg-orange-500">
                                                 <FaEdit className="text-white 
                                         "></FaEdit>
                                             </button>

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layouts/Main";
 import ErrorPage from "../Shares/ErrorPage/ErrorPage";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import Home from "../Pages/HomePages/Home/Home";
+import Home from "../Pages/HomePages/Home";
 import MyOrders from "../Pages/Dashboard/MyOrders/MyOrders";
 import LogIn from "../Pages/Forms/LogIn";
 import SignUp from "../Pages/Forms/SignUp";
@@ -17,6 +17,7 @@ import AddProduct from "../Pages/Dashboard/AddProduct/AddProduct";
 import MyProduct from "../Pages/Dashboard/MyProduct/MyProduct";
 import PrivateRoute from "./PrivateRoute";
 import Cart from "../Pages/Dashboard/Cart/Cart";
+import EditProduct from "../Pages/Dashboard/EditProduct/EditProduct";
 // import EditProduct from "../Pages/Dashboard/EditProduct/EditProduct";
 
 export const routes = createBrowserRouter([
@@ -87,11 +88,12 @@ export const routes = createBrowserRouter([
                 path: '/dashboard/addProduct',
                 element: <AddProduct />
             },
-            // {
-            //     path: '/dashboard/editProduct/:id',
-            //     element: <EditProduct/>,
-            //     loader: async({params})=> await fetch(`https://mobile-market-server.onrender.com/mobile/${params.id}`),
-            // },
+            {
+                path: '/dashboard/editProduct/:id',
+                element: <EditProduct/>,
+                loader: async({params})=> await fetch(`http://localhost:5000/usedServices/${params.id}`),
+            },
+            
             {
                 path: '/dashboard',
                 element: <MyOrders></MyOrders>

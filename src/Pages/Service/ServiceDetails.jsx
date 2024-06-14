@@ -9,7 +9,7 @@ const ServiceDetails = () => {
     const navigate = useNavigate();
 
     const service = useLoaderData();
-    const { _id, name, img, price, rating, description } = service;
+    const { _id, name, image, price, rating, description } = service;
 
 
     const handleBooking = (event) => {

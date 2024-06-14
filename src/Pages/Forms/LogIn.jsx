@@ -40,6 +40,8 @@ const LogIn = () => {
                     }
                 });
                 navigate(from, { replace: true });
+                
+
             })
     }
 
