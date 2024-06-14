@@ -24,7 +24,7 @@ const MyProduct = () => {
                 // console.log(res.data);
                 if (res.data.deletedCount > 0) {
                     // refetch to update the ui
-                    
+                    refetch();
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
@@ -32,7 +32,7 @@ const MyProduct = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    refetch();
+                    
                     // navigate('/');
                 }
 

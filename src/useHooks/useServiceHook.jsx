@@ -13,7 +13,7 @@ const useServiceHook = () => {
         }
     })
 
-console.log(usedServices)
+// console.log(usedServices)
     return [usedServices,  refetch]
 }
 

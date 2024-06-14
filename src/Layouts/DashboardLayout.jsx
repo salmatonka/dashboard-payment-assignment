@@ -62,6 +62,12 @@ const DashboardLayout = () => {
                                         <span className="ml-3">My Product</span>
                                     </Link>
                                 </li>
+                                <li className='pb-4 px-4'>
+                                    <Link to='/dashboard/userProfile' className="flex items-center p-2 rounded-lg  group w-full border">
+                                        <BiSolidHourglass />
+                                        <span className="ml-3">User Profile</span>
+                                    </Link>
+                                </li>
 
 
                                 <li className='pb-4 px-4'>
@@ -132,7 +138,12 @@ const DashboardLayout = () => {
                                 </Link>
                             </li>
 
-
+                            <li className='pb-4 px-4'>
+                                    <Link to='/dashboard/userProfile' className="flex items-center p-2 rounded-lg  group w-full border">
+                                        <BiSolidHourglass />
+                                        <span className="ml-3">User Profile</span>
+                                    </Link>
+                                </li>
                             <li className='pb-4 px-4'>
                                 <Link to='/dashboard/allUsers' className="flex items-center p-2 rounded-lg  group w-full border">
                                     <TbFloatRight />

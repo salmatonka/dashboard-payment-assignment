@@ -18,7 +18,10 @@ import MyProduct from "../Pages/Dashboard/MyProduct/MyProduct";
 import PrivateRoute from "./PrivateRoute";
 import Cart from "../Pages/Dashboard/Cart/Cart";
 import EditProduct from "../Pages/Dashboard/EditProduct/EditProduct";
-// import EditProduct from "../Pages/Dashboard/EditProduct/EditProduct";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
+import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
+import UserHome from "../Pages/Dashboard/UserHome/UserHome";
 
 export const routes = createBrowserRouter([
     {
@@ -73,9 +76,9 @@ export const routes = createBrowserRouter([
         element:<PrivateRoute> <DashboardLayout /></PrivateRoute>,
         children: [
             {
-                path: '/dashboard',
-                element: <MyOrders></MyOrders>
-            },
+                path: 'userHome',
+                element: <UserHome />
+              },
             {
                 path: '/dashboard/cart',
                 element: <Cart />
@@ -84,24 +87,35 @@ export const routes = createBrowserRouter([
                 path: '/dashboard/myProduct',
                 element: <MyProduct />
             },
+            // admin only routes
             {
                 path: '/dashboard/addProduct',
-                element: <AddProduct />
+                element:<AddProduct /> 
             },
             {
                 path: '/dashboard/editProduct/:id',
-                element: <EditProduct/>,
+                element: <EditProduct/> ,
                 loader: async({params})=> await fetch(`http://localhost:5000/usedServices/${params.id}`),
             },
-            
             {
-                path: '/dashboard',
-                element: <MyOrders></MyOrders>
+                path: '/dashboard/userProfile',
+                element:<UserProfile />
+                // element:<AdminRoute><UserProfile /></AdminRoute> 
             },
+              
             {
                 path: '/dashboard/allUsers',
-                element:<AllUsers />
-            }
+                // element:<AdminRoute><AllUsers /></AdminRoute> 
+                element:<AllUsers /> 
+            },
+            {
+                path: '/dashboard/payment',
+                element: <Payment />
+              },
+              {
+                path: '/dashboard/paymentHistory',
+                element: <PaymentHistory />
+              },
             
             
         ]

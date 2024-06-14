@@ -18,7 +18,7 @@ const AddProduct = () => {
     const onSubmit = async (data) => {
         console.log(data)
         // image upload to imgbb and then get an url
-        const imageFile = { image: data.img[0] }
+        const imageFile = { image: data.image[0] }
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
                 'content-type': 'multipart/form-data'

@@ -4,37 +4,48 @@ import { AuthContext } from '../../Providers/AuthProvider';
 import { toast } from 'react-toastify';
 import { FaShoppingCart } from 'react-icons/fa';
 import useCart from '../../useHooks/useCart';
+import useAdmin from '../../useAdminHook/useAdmin';
 
 const Navbar = () => {
   const [cart] = useCart()
   const { user, logOut } = useContext(AuthContext);
-  // console.log(user);
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
   const handleLogOut = () => {
     logOut()
       .then(toast.warning('user logOut...!'))
       .catch(error => toast.error(error.message))
   }
 
-
+  const [isAdmin] = useAdmin();
   // menu items for show in header 
   const menuItem = <>
     <li><NavLink className="rounded-xl" to='/'>Home</NavLink></li>
+    <li><NavLink className=" rounded-xl" to='/blog'>Blog</NavLink></li>
+    <li><NavLink className="rounded-xl" to='/aboutUs'>AboutUs</NavLink></li>
+    <li><NavLink className="rounded-xl" to='/contactUs'>contactUs</NavLink></li>
+
+    {
+      // user ? 'true': 'false'
+      // user ? condition ? 'double true' : 'one true' : 'false' 
+    }
+    {/* {
+      user && isAdmin && <li><Link to="/dashboard/adminHome">Dashboard</Link></li>
+    }
+    {
+      user && !isAdmin && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
+    } */}
     <li><NavLink to="/dashboard/cart">
       <button className="btn">
         <FaShoppingCart className="badge badge-primary"></FaShoppingCart>
         <div className="">+{cart?.length}</div>
       </button>
     </NavLink></li>
-    <li><NavLink className=" rounded-xl" to='/blog'>Blog</NavLink></li>
-    <li><NavLink className="rounded-xl" to='/abouttUs'>AboutUs</NavLink></li>
-    <li><NavLink className="rounded-xl" to='/contctUs'>contactUs</NavLink></li>
+
+
     {
       user?.uid ?
         <>
           <li><NavLink className="rounded-xl " to='/service'>Service</NavLink></li>
-          {/* <li><NavLink className="rounded-xl " to='/dashboard'>Dashboard</NavLink></li> */}
+          <li><NavLink to="/dashboard/userHome">Dashboard</NavLink></li>
           <li><button onClick={handleLogOut}>Sign Out</button></li>
         </>
         :
