@@ -5,7 +5,7 @@ import ServiceCard from '../Service/ServiceCard'
 const HomeService = () => {
   //     const [services, setServices] = useState([]);
 //   useEffect(() => {
-//     fetch('http://localhost:5000/service')
+//     fetch('https://dashboard-payment-server.onrender.com/service')
 //       .then(res => res.json())
 //       .then(data => setServices(data))
 //   }, [])
@@ -13,7 +13,7 @@ const HomeService = () => {
 const { data: services = [] } = useQuery({
     queryKey: ['services'],
     queryFn: async () => {
-        const res = await fetch('http://localhost:5000/service')
+        const res = await fetch('https://dashboard-payment-server.onrender.com/service')
         const data = await res.json()
         return data;
     }

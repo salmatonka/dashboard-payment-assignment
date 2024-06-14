@@ -40,12 +40,12 @@ export const routes = createBrowserRouter([
             },
             {
                 path: '/usedServices/:category',
-                loader: async ({ params }) => await fetch(`http://localhost:5000/usedServices/${params?.category}`),
+                loader: async ({ params }) => await fetch(`https://dashboard-payment-server.onrender.com/usedServices/${params?.category}`),
                 element: <FilterByCategorey />
             },
             {
                 path: '/service/:id',
-                loader: async ({ params }) => await fetch(`http://localhost:5000/service/${params?.id}`),
+                loader: async ({ params }) => await fetch(`https://dashboard-payment-server.onrender.com/service/${params?.id}`),
                 element: <ServiceDetails />
             },
             {
@@ -95,7 +95,7 @@ export const routes = createBrowserRouter([
             {
                 path: '/dashboard/editProduct/:id',
                 element: <EditProduct/> ,
-                loader: async({params})=> await fetch(`http://localhost:5000/usedServices/${params.id}`),
+                loader: async({params})=> await fetch(`https://dashboard-payment-server.onrender.com/usedServices/${params.id}`),
             },
             {
                 path: '/dashboard/userProfile',
